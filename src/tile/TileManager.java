@@ -13,8 +13,8 @@ import java.util.Objects;
 public class TileManager {
 
     GamePanel gp;
-    Tile[] tile;
-    int[][] mapTileNum;
+    public Tile[] tile;
+    public  int[][] mapTileNum;
 
 
     public TileManager(GamePanel gp) {
@@ -36,60 +36,79 @@ public class TileManager {
 
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part1.png")));
+            tile[1].collision = true;
 
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part2.png")));
+            tile[2].collision = true;
 
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part3.png")));
+            tile[3].collision = true;
 
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part4.png")));
+            tile[4].collision = true;
 
             tile[5] = new Tile();
             tile[5].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part5.png")));
+            tile[5].collision = true;
 
             tile[6] = new Tile();
             tile[6].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part6.png")));
+            tile[6].collision = true;
 
             tile[7] = new Tile();
             tile[7].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part7.png")));
+            tile[7].collision = true;
 
             tile[8] = new Tile();
             tile[8].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part8.png")));
+            tile[8].collision = true;
 
             tile[9] = new Tile();
             tile[9].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part9.png")));
+            tile[9].collision = true;
 
             tile[10] = new Tile();
             tile[10].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part10.png")));
+            tile[10].collision = true;
 
             tile[11] = new Tile();
             tile[11].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part11.png")));
+            tile[11].collision = true;
 
             tile[12] = new Tile();
             tile[12].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part12.png")));
+            tile[12].collision = true;
 
             tile[13] = new Tile();
             tile[13].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/CastleWall/CastleWall_part12_down.png")));
+            tile[13].collision = true;
 
             tile[14] = new Tile();
             tile[14].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part1.png")));
+            tile[14].collision = true;
 
             tile[15] = new Tile();
             tile[15].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part2.png")));
+            tile[15].collision = true;
 
             tile[16] = new Tile();
             tile[16].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part3.png")));
+            tile[16].collision = true;
 
             tile[17] = new Tile();
             tile[17].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part4.png")));
+            tile[17].collision = true;
 
             tile[18] = new Tile();
             tile[18].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part5.png")));
+            tile[18].collision = true;
 
             tile[19] = new Tile();
             tile[19].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/Mettalic_Gates/Mettalic_Gates_part6.png")));
+            tile[19].collision = true;
 
         } catch (IOException e) {
             e.printStackTrace();
