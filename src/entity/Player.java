@@ -17,6 +17,8 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
 
+    int hasKey = 0;
+
     public Player(GamePanel gp, KeyHandler keyH) {
 
         this.gp = gp;
@@ -27,9 +29,11 @@ public class Player extends Entity{
 
         solidArea = new Rectangle();
         solidArea.x = 9;
-        solidArea.y = 29;
-        solidArea.width = 41;
-        solidArea.height = 35;
+        solidArea.y = 46;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 36;
+        solidArea.height = 17;
 
         setDefaultValues();
         getPlayerImage();
@@ -38,7 +42,7 @@ public class Player extends Entity{
 
         worldX = gp.tileSize * 30;
         worldY = gp.tileSize * 18;
-        speed = 4;
+        speed = 5;
         direction = "down";
         direction_memory = "right";
     }
@@ -92,6 +96,10 @@ public class Player extends Entity{
             collisionOn = false;
             gp.cChecker.checkTile(this);
 
+            // CHECK OBJECT COLLISION
+            int objIndex = gp.cChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
             //IF COLLISION IS FALSE
             if(collisionOn == false) {
 
@@ -135,6 +143,37 @@ public class Player extends Entity{
         }
 
     }
+
+    public void pickUpObject(int i) {
+
+        if (i != 999) {
+
+            String objectName = gp.obj[i].name;
+
+            switch (objectName) {
+                case "Key" -> {
+                    gp.playSE(3);
+                    hasKey++;
+                    gp.obj[i] = null;
+                    System.out.println("Key:" + hasKey);
+                }
+                case "Door" -> {
+                    if (hasKey > 0) {
+                        gp.playSE(2);
+                        gp.obj[i] = null;
+                        hasKey--;
+                    }
+                    System.out.println("Key:" + hasKey);
+                }
+                case "Bone_book" -> {
+                    gp.playSE(1);
+                    speed += 2;
+                    gp.obj[i] = null;
+                }
+            }
+        }
+    }
+
     public void draw(Graphics2D g2){
 
         //g2.setColor(Color.white);

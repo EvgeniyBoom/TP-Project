@@ -1,7 +1,6 @@
 # vap-game-remake/Vap-Game-Remake
 
 
-
 ## Getting Started
 
 Download links:
@@ -19,13 +18,20 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them.
 
 ```
-Examples
+For better experience of Game Developing you should install IntelliJ IDEA
 ```
-
-## Deployment
-
-Add additional notes about how to deploy this on a production system.
 
 ## Resources
 
 Add links to external resources for this project, such as CI server, bug tracker, etc.
+
+Asset packs that can be used:
+
+1) https://anokolisa.itch.io/simulator-world-build
+2) https://anokolisa.itch.io/pixel-crawler-ff
+3) https://anokolisa.itch.io/pixel-crawler-cemetery
+4) https://anokolisa.itch.io/pixel-crawler-desert
+5) https://anokolisa.itch.io/pixel-crawler-forge
+
+Asset pack that already used:
+1) https://anokolisa.itch.io/dungeon-crawler-pixel-art-asset-pack
