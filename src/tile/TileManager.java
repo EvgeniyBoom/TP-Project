@@ -31,7 +31,7 @@ public class TileManager {
 
     public void getTileImage() {
 
-
+        // NEED A PLACEHOLDER FOR NUMBERS 0-9  Check the 12-th lesson!
         setup(0, "Grass/Grass_part_5", false);
         setup(1, "CastleWall/CastleWall_part1", true);
         setup(2, "CastleWall/CastleWall_part2", true);
