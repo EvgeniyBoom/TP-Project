@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
 
-    int hasKey = 0;
+    public int hasKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH) {
 
@@ -48,36 +49,46 @@ public class Player extends Entity{
     }
     public void getPlayerImage() {
 
-        try{
-            idle1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_1.png")));
-            idle2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_2.png")));
-            idle3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_3.png")));
-            idle4 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_4.png")));
-            idle_left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_left_1.png")));
-            idle_left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_left_2.png")));
-            idle_left3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_left_3.png")));
-            idle_left4 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Idle_left_4.png")));
-            run_left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_left_1.png")));
-            run_left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_left_2.png")));
-            run_left3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_left_3.png")));
-            run_left4 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_left_4.png")));
-            run_left5 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_left_5.png")));
-            run_right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_right_1.png")));
-            run_right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_right_2.png")));
-            run_right3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_right_3.png")));
-            run_right4 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_right_4.png")));
-            run_right5 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/Run_right_5.png")));
+        idle1 = setup("Idle_1");
+        idle2 = setup("Idle_2");
+        idle3 = setup("Idle_3");
+        idle4 = setup("Idle_4");
+        idle_left1 = setup("Idle_left_1");
+        idle_left2 = setup("Idle_left_2");
+        idle_left3 = setup("Idle_left_3");
+        idle_left4 = setup("Idle_left_4");
+        run_left1 = setup("Run_left_1");
+        run_left2 = setup("Run_left_2");
+        run_left3 = setup("Run_left_3");
+        run_left4 = setup("Run_left_4");
+        run_left5 = setup("Run_left_5");
+        run_right1 = setup("Run_right_1");
+        run_right2 = setup("Run_right_2");
+        run_right3 = setup("Run_right_3");
+        run_right4 = setup("Run_right_4");
+        run_right5 = setup("Run_right_5");
+
+    }
+
+    public BufferedImage setup(String imageName) {
+
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/" + imageName + ".png")));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return image;
     }
-
 
     public void update() {
 
         if (keyH.rightPressed == true || keyH.leftPressed == true || keyH.upPressed == true || keyH.downPressed == true) {
-            if(keyH.upPressed == true){
+            if (keyH.upPressed == true) {
                 direction = "up";
             }
             else if (keyH.downPressed == true) {
@@ -155,20 +166,29 @@ public class Player extends Entity{
                     gp.playSE(3);
                     hasKey++;
                     gp.obj[i] = null;
-                    System.out.println("Key:" + hasKey);
+                    gp.ui.showMessage("You got a key!");
                 }
                 case "Door" -> {
                     if (hasKey > 0) {
                         gp.playSE(2);
                         gp.obj[i] = null;
                         hasKey--;
+                        gp.ui.showMessage("You opened the door!");
                     }
-                    System.out.println("Key:" + hasKey);
+                    else {
+                        gp.ui.showMessage("You need a key!");
+                    }
                 }
                 case "Bone_book" -> {
                     gp.playSE(1);
                     speed += 2;
                     gp.obj[i] = null;
+                    gp.ui.showMessage("Speed Up!");
+                }
+                case "Chest" -> {
+                    gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    gp.playSE(4);
                 }
             }
         }
@@ -223,6 +243,6 @@ public class Player extends Entity{
                 }
             }
         }
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, null);
     }
 }
