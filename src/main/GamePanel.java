@@ -6,6 +6,7 @@ import tile.TileManager;
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -23,11 +24,18 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxWorldCol = 59;
     public final int maxWorldRow = 37;
 
+    // FULL SCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
+    public boolean fullScreenOn = false;
+
     // FPS
     int FPS = 60; //60
 
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -38,6 +46,14 @@ public class GamePanel extends JPanel implements Runnable{
     // ENTITY AND OBJECT
     public Player player = new Player(this,keyH);
     public SuperObject[] obj = new SuperObject[10];
+
+    // GAME STATE
+    public int gameState;
+    public final int titleState = 0;
+    public final int playState = 1;
+    public final int pauseState = 2;
+    public final int optionsState = 5;
+
 
 
     public  GamePanel() {
@@ -51,15 +67,37 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setupGame() {
 
-        aSetter.setObject();
+        aSetter.setObject_Key(0, 9, 4);
+        aSetter.setObject_Door(1, 10, 10);
+        aSetter.setObject_Door(2, 11, 10);
+        aSetter.setObject_Chest(3, 12, 3);
+        aSetter.setObject_Bone_book(4, 12, 4);
 
-        //playMusic(0);
+        gameState = titleState;
+
+        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D) tempScreen.getGraphics();
+
+        //setFullScreen();
+
     }
 
     public void startGameThread() {
 
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void setFullScreen() {
+
+        // GET LOCAL SCREEN DEVICE
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        // GET FULL SCREEN WIDTH AND HEIGHT
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
     }
 
     @Override
@@ -83,7 +121,11 @@ public class GamePanel extends JPanel implements Runnable{
                 // 1 UPDATE: update information such as character position
                 update();
                 // 2 DRAW: draw the screen with the updated information
-                repaint();
+
+                //repaint();
+                drawToTempScreen();
+                drawToScreen();
+
                 delta--;
                 drawCount++;
             }
@@ -100,7 +142,62 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void update() {
 
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
+        if (gameState == pauseState) {
+            // nothing
+        }
+
+
+    }
+
+    public void drawToTempScreen() {
+
+        // DEBUG
+        long drawStart = 0;
+        if(keyH.checkDrawTime == true) {
+            drawStart = System.nanoTime();
+        }
+
+        // TITLE SCREEN
+        if(gameState == titleState) {
+            ui.draw(g2);
+        }
+        // OTHERS
+        else {
+            // TILE
+            tileM.drawSingleMap(g2);
+            //tileM.drawWorldMap(g2);
+
+            // OBJECT
+            for(int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
+            }
+
+            // PLAYER
+            player.draw(g2);
+
+            // UI
+            ui.draw(g2);
+        }
+
+        if(keyH.checkDrawTime == true) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw Time: " + passed, 10, 400);
+            System.out.println("Draw Time: " + passed);
+        }
+    }
+
+    public void drawToScreen() {
+
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+        g.dispose();
     }
     public void paintComponent (Graphics g) {
 
@@ -113,21 +210,29 @@ public class GamePanel extends JPanel implements Runnable{
             drawStart = System.nanoTime();
         }
 
-        // TILE
-        tileM.draw(g2);
-
-        // OBJECT
-        for(int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
-            }
+        // TITLE SCREEN
+        if(gameState == titleState) {
+            ui.draw(g2);
         }
+        // OTHERS
+        else {
+            // TILE
+            tileM.drawSingleMap(g2);
+            //tileM.drawWorldMap(g2);
 
-        // PLAYER
-        player.draw(g2);
+            // OBJECT
+            for(int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
+            }
 
-        // UI
-        ui.draw(g2);
+            // PLAYER
+            player.draw(g2);
+
+            // UI
+            ui.draw(g2);
+        }
 
         if(keyH.checkDrawTime == true) {
             long drawEnd = System.nanoTime();
